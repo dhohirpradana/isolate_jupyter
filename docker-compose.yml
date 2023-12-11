@@ -1,0 +1,16 @@
+services:
+  yusuf:
+    image: jupyter/scipy-notebook:70178b8e48d7
+    container_name: yusuf
+    ports:
+      - "38000:8888"
+    volumes:
+      - jupyteryusuf:/home/jovyan/work
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+    tty: true
+    stdin_open: true
+
+volumes:
+  jupyteryusuf:
+
