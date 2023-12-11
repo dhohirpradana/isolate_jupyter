@@ -9,7 +9,7 @@ app = Flask(__name__)
 from pb_user import user_create
 from juphub import generate_token, service_remove
 
-required_env_vars = ["PB_URL", "PB_LOGIN_URL", "PB_MAIL", "PB_USER_URL", "PB_PASSWORD"]
+required_env_vars = ["PB_URL", "PB_LOGIN_URL", "PB_MAIL", "PB_USER_URL", "PB_PASSWORD", "HDFS_URL"]
 
 def validate_envs():
     for env_var in required_env_vars:

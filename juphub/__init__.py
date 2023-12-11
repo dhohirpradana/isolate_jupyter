@@ -2,6 +2,7 @@ import subprocess
 import re
 from flask import Flask, jsonify, request
 from pb_user import user_create, user_check
+from hdfs import dir_create, dir_remove
 
 def generate_token(service_name):
     # validate request body
@@ -50,6 +51,7 @@ def generate_token(service_name):
     elif jupyter == "406":
         return jsonify({"message": f"Port {port} already in use."}), 406
 
+    dir_create(username)
     user_create(jupyter, port, username, password, email, first_name, last_name)
     return jsonify({"token": jupyter, "port": port})
 
@@ -60,4 +62,5 @@ def service_remove(service_name):
         f'docker rm -f {service_name}'
     ], capture_output=True, text=True).stdout.strip()
     
+    dir_remove(service_name)
     return jsonify({"message": f"Service {service_name} removed."})
