@@ -14,13 +14,13 @@ def user_create(j_token, j_port, username, password, email):
     try:
         r = requests.post(pb_user_url,
                         json={
-                            "email": "yusuf@gmail.com",
-                            "password": "2wsx1qaz",
-                            "username": "yusuf",
-                            "passwordConfirm": "2wsx1qaz",
+                            "email": email,
+                            "password": password,
+                            "username": username,
+                            "passwordConfirm": password,
                             "role": "authenticated",
-                            "jToken": "",
-                            "jPort": ""
+                            "jToken": j_token,
+                            "jPort": j_port
                         },
                         headers={
                             "Authorization": "Bearer " + pb_token
