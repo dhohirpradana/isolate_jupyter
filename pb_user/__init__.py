@@ -48,6 +48,35 @@ def user_create(j_token, j_port, username, password, email, first_name, last_nam
         print(str(e))
         return jsonify({"message": "Error create user."}), status_code
     
+def user_remove(username):
+    pb_token = token_get()
+    # get list of users
+    try:
+        r = requests.get(pb_user_url, headers={"Authorization": "Bearer " + pb_token})
+        r.raise_for_status()
+        data = r.json()
+        users = data["items"]
+        
+        # check if user exists and get id
+        for user in users:
+            if user["username"] == username:
+                user_id = user["id"]
+                try:
+                    r = requests.delete(pb_user_url + f"/{user_id}", headers={"Authorization": "Bearer " + pb_token})
+                    r.raise_for_status()
+                    data = r.json()
+                    status_code = r.status_code
+                    print(data)
+                except Exception as e:
+                    status_code = r.status_code
+                    print(str(e))
+                break
+            else:
+                pass
+    except Exception as e:
+        print(str(e))
+        pass
+    
 # check if user already exists
 def user_check(email, username):
     pb_token = token_get()

@@ -1,7 +1,7 @@
 import subprocess
 import re
 from flask import Flask, jsonify, request
-from pb_user import user_create, user_check
+from pb_user import user_create, user_check, user_remove
 from hdfs import dir_create, dir_remove
 
 def generate_token(service_name):
@@ -63,4 +63,5 @@ def service_remove(service_name):
     ], capture_output=True, text=True).stdout.strip()
     
     dir_remove(service_name)
+    user_remove(service_name)
     return jsonify({"message": f"Service {service_name} removed."})
