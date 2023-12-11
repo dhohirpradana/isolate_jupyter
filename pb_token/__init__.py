@@ -1,10 +1,13 @@
 import requests
 import os
+from flask import Flask, jsonify
+from dotenv import load_dotenv
+
+load_dotenv()
+
 pb_login_url = os.environ.get('PB_LOGIN_URL')
 pb_mail = os.environ.get('PB_MAIL')
 pb_password = os.environ.get('PB_PASSWORD')
-from flask import Flask, jsonify
-
 
 def token_get():
     # lastRun

@@ -3,6 +3,9 @@ import requests
 from flask import Flask, request, jsonify
 
 from pb_token import token_get
+from dotenv import load_dotenv
+
+load_dotenv()
 
 pb_user_url = os.environ.get('PB_USER_URL')
 
