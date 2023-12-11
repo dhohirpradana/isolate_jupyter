@@ -17,12 +17,12 @@ def validate_envs():
             raise EnvironmentError(
                 f"Required environment variable {env_var} is not set.")
 
-@app.route('/jupyserv-create/<username>', methods=['POST'])
+@app.route('/jupyserv/<username>', methods=['POST'])
 def jupyserv_create(username):
     validate_envs()
     return generate_token(username)
 
-@app.route('/jupyserv-remove/<username>', methods=['DELETE'])
+@app.route('/jupyserv/<username>', methods=['DELETE'])
 def jupyserv_remove(username):
     return service_remove(username)
 
