@@ -7,7 +7,7 @@ load_dotenv()
 app = Flask(__name__)
 
 from pb_user import user_create
-from juphub import generate_token
+from juphub import generate_token, service_remove
 
 required_env_vars = ["PB_URL", "PB_LOGIN_URL", "PB_MAIL", "PB_USER_URL", "PB_PASSWORD"]
 
@@ -21,6 +21,10 @@ def validate_envs():
 def jupyserv_create(username):
     validate_envs()
     return generate_token(username)
+
+@app.route('/jupyserv-remove/<username>', methods=['DELETE'])
+def jupyserv_remove(username):
+    return service_remove(username)
 
 @app.route('/test', methods=['GET'])
 def test():
