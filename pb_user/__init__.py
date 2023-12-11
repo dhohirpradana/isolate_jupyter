@@ -9,7 +9,18 @@ load_dotenv()
 
 pb_user_url = os.environ.get('PB_USER_URL')
 
-def user_create(j_token, j_port, username, password, email):
+def user_create(j_token, j_port, username, password, email, first_name, last_name):
+    print({
+        "email": email,
+        "password": password,
+        "username": username,
+        "passwordConfirm": password,
+        "firstName": first_name,
+        "lastName": last_name,
+        "role": "authenticated",
+        "jToken": j_token,
+        "jPort": j_port
+    })
     pb_token = token_get()
     try:
         r = requests.post(pb_user_url,
@@ -18,6 +29,8 @@ def user_create(j_token, j_port, username, password, email):
                             "password": password,
                             "username": username,
                             "passwordConfirm": password,
+                            "firstName": first_name,
+                            "lastName": last_name,
                             "role": "authenticated",
                             "jToken": j_token,
                             "jPort": j_port

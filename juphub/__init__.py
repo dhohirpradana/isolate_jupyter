@@ -18,6 +18,8 @@ def generate_token(service_name):
     username = service_name
     password = data['password']
     email = data['email']
+    first_name = data['firstName']
+    last_name = data['lastName']
     
     user_not_exists = user_check(email, service_name)
     
@@ -27,7 +29,7 @@ def generate_token(service_name):
     unused_port = subprocess.run([
         '/bin/bash',
         '-c',
-        f'./unused_port.sh'
+        f'/home/bodhaperjuangan/isolate_jupyter/unused_port.sh'
     ], capture_output=True, text=True).stdout.strip()
     
     if unused_port == "404":
@@ -38,7 +40,7 @@ def generate_token(service_name):
     jupyter = subprocess.run([
         '/bin/bash',
         '-c',
-        f'./jupyter.sh {service_name} {port}'
+        f'/home/bodhaperjuangan/isolate_jupyter/jupyter.sh {service_name} {port}'
     ], capture_output=True, text=True).stdout.strip()
     
     if jupyter == "400":
@@ -48,5 +50,5 @@ def generate_token(service_name):
     elif jupyter == "406":
         return jsonify({"message": f"Port {port} already in use."}), 406
 
-    user_create(jupyter, port, username, password, email)
+    user_create(jupyter, port, username, password, email, first_name, last_name)
     return jsonify({"token": jupyter, "port": port})
