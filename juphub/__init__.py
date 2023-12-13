@@ -87,6 +87,12 @@ def service_remove(service_name):
         f'docker stack rm --volumes {service_name}'
     ], capture_output=True, text=True).stdout.strip()
     
+    subprocess.run([
+        '/bin/bash',
+        '-c',
+        f'ansible-playbook /home/bodhaperjuangan/isolate_jupyter/ansible/rm-volumes.yml'
+    ], capture_output=True, text=True).stdout.strip()
+    
     dir_remove(service_name)
     user_remove(service_name)
     return jsonify({"message": f"Service {service_name} removed."})

@@ -1,0 +1,12 @@
+---
+- name: Copy file with owner and permissions
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Copy file
+      ansible.builtin.copy:
+        src: /home/bodhaperjuangan/rm-swarm-volume.sh
+        dest: /home/bodhaperjuangan/rm-swarm-volume.sh
+        owner: bodhaperjuangan  # Set the owner of the copied file
+        group: bodhaperjuangan  # Set the group of the copied file
+        mode: '0755'            # Set the permissions (e.g., 0755 for rwxr-xr-x)

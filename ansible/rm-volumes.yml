@@ -1,0 +1,7 @@
+---
+- name: Run script on all hosts
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Run the script
+      ansible.builtin.command: sudo /home/bodhaperjuangan/rm-swarm-volume.sh
