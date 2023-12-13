@@ -66,6 +66,7 @@ def service_remove(service_name):
     # check connection
     pb_check_connection()
     hdfs_check_connection()
+    
     subprocess.run([
         '/bin/bash',
         '-c',
