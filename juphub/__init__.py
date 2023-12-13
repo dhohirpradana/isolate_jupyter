@@ -2,9 +2,14 @@ import subprocess
 import re
 from flask import Flask, jsonify, request
 from pb_user import user_create, user_check, user_remove
-from hdfs import dir_create, dir_remove
+from pb_token import check_connection as pb_check_connection
+from hdfs import dir_create, dir_remove, check_connection as hdfs_check_connection
 
 def generate_token(service_name):
+    # check connection
+    pb_check_connection()
+    hdfs_check_connection()
+    
     # validate request body
     required_fields = ['email', 'password', 'firstName', 'lastName']
     data = request.get_json()
