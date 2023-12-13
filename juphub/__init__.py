@@ -5,10 +5,20 @@ from pb_user import user_create, user_check, user_remove
 from pb_token import check_connection as pb_check_connection
 from hdfs import dir_create, dir_remove, check_connection as hdfs_check_connection
 
+# check connection
+def check_connection():
+    pb_check = pb_check_connection()
+    hdfs_check = hdfs_check_connection()
+    return (pb_check, hdfs_check)
+
 def generate_token(service_name):
-    # check connection
-    pb_check_connection()
-    hdfs_check_connection()
+    pb_conn, hdfs_conn = check_connection()
+    
+    if not pb_conn:
+        return jsonify({"message": "Connection error to PB."}), 500
+    
+    if not hdfs_conn:
+        return jsonify({"message": "Connection error to HDFS."}), 500
     
     # validate request body
     required_fields = ['email', 'password', 'firstName', 'lastName']
@@ -63,9 +73,13 @@ def generate_token(service_name):
     return jsonify({"token": jupyter, "port": port})
 
 def service_remove(service_name):
-    # check connection
-    pb_check_connection()
-    hdfs_check_connection()
+    pb_conn, hdfs_conn = check_connection()
+    
+    if not pb_conn:
+        return jsonify({"message": "Connection error to PB."}), 500
+    
+    if not hdfs_conn:
+        return jsonify({"message": "Connection error to HDFS."}), 500
     
     subprocess.run([
         '/bin/bash',

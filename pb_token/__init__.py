@@ -13,10 +13,10 @@ pb_password = os.environ.get('PB_PASSWORD')
 def check_connection():
     try:
         r = requests.get(pb_login_url)
-        print("Connection success to PB")
+        return True
     except Exception as e:
         print(str(e))
-        return jsonify({"message": "Error check connection to PB."}), 500
+        return False
 
 def token_get():
     # lastRun

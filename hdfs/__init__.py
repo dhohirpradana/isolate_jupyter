@@ -12,10 +12,10 @@ hdfs_url = os.environ.get('HDFS_URL')
 def check_connection():
     try:
         r = requests.get(hdfs_url)
-        print("Connection failed to HDFS")
+        return True
     except Exception as e:
         print(str(e))
-        return jsonify({"message": "Error check connection to HDFS."}), 500
+        return False
 
 def dir_create(username):
     r = requests.put(hdfs_url + f"/usersapujagad/{username}?user.name={username}&op=MKDIRS")
