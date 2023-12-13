@@ -63,6 +63,9 @@ def generate_token(service_name):
     return jsonify({"token": jupyter, "port": port})
 
 def service_remove(service_name):
+    # check connection
+    pb_check_connection()
+    hdfs_check_connection()
     subprocess.run([
         '/bin/bash',
         '-c',
