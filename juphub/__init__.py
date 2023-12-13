@@ -52,6 +52,8 @@ def generate_token(service_name):
         return jsonify({"message": f"Port {port} already in use."}), 406
 
     dir_create(username)
+    
+    jupyter = jupyter.splitlines()[-1]
     user_create(jupyter, port, username, password, email, first_name, last_name)
     return jsonify({"token": jupyter, "port": port})
 
@@ -59,7 +61,7 @@ def service_remove(service_name):
     subprocess.run([
         '/bin/bash',
         '-c',
-        f'docker rm -f {service_name}'
+        f'docker stack rm --volumes {service_name}'
     ], capture_output=True, text=True).stdout.strip()
     
     dir_remove(service_name)

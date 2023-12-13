@@ -1,16 +1,17 @@
+version: '3.8'
+
 services:
-  yusuf:
-    image: jupyter/scipy-notebook:70178b8e48d7
-    container_name: yusuf
+  admin:
+    image: 103.127.97.93:5000/jupyter-spark
+    deploy:
+      replicas: 1
     ports:
       - "38000:8888"
     volumes:
-      - jupyteryusuf:/home/jovyan/work
+      - jupyter-admin:/home/jovyan/work
     environment:
       - JUPYTER_ENABLE_LAB=yes
-    tty: true
-    stdin_open: true
+      - GRANT_SUDO=yes
 
 volumes:
-  jupyteryusuf:
-
+  jupyter-admin:

@@ -22,6 +22,24 @@ if lsof -Pi :$port -sTCP:LISTEN -t >/dev/null; then
     exit 1
 fi
 
+# Function to check if jtoken is empty
+is_jtoken_empty() {
+    [ -z "$jtoken" ]
+}
+
+wait_for_jtoken() {
+    local timeout=30  # Maximum wait time in seconds
+    local interval=1   # Interval to check in seconds
+    local waited=0
+
+    while is_jtoken_empty && [ $waited -lt $timeout ]; do
+        sleep $interval
+        # jtoken=$(docker logs "$service_name" | grep "token=" | awk -F"token=" '{print $2}' | awk '{print $1}' | head -n 1)
+        jtoken=$(docker service logs ${service_name}_${service_name} 2>&1 | grep "token=" | awk -F"=" '{print $NF}' | tail -n 1)
+        waited=$((waited + interval))
+    done
+}
+
 # Create docker-compose.yml
 cat > docker-compose.yml <<EOF
 version: '3.8'
@@ -34,22 +52,19 @@ services:
     ports:
       - "$port:8888"
     volumes:
-      - jupyter$service_name:/home/jovyan/work
+      - jupyter-$service_name:/home/jovyan/work
     environment:
       - JUPYTER_ENABLE_LAB=yes
       - GRANT_SUDO=yes
 
 volumes:
-  jupyter$service_name:
+  jupyter-$service_name:
 EOF
 
 # Deploy the stack
 docker stack deploy -c docker-compose.yml $service_name
 
-# Wait for a while for the service to start (adjust this timing according to your setup)
-sleep 10
+# Wait for jtoken to be available
+wait_for_jtoken
 
-# Get the token from the logs of one of the containers
-jtoken=$(docker service logs $service_name_$service_name | grep "token=" | awk -F"token=" '{print $2}' | awk '{print $1}' | head -n 1)
-
-echo "Token for $service_name service is: $jtoken"
+echo "$jtoken"
