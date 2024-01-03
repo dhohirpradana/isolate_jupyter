@@ -1,17 +1,12 @@
 version: '3.8'
 
 services:
-  admin:
-    image: 103.127.97.93:5000/jupyter-spark
+  test:
+    image: dhohirp/pyspark-jupyter
     deploy:
       replicas: 1
     ports:
-      - "38000:8888"
-    volumes:
-      - jupyter-admin:/home/jovyan/work
+      - "38003:8888"
     environment:
       - JUPYTER_ENABLE_LAB=yes
       - GRANT_SUDO=yes
-
-volumes:
-  jupyter-admin:

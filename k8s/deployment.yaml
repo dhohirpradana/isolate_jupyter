@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: isolate-jupyter-$(SERVICE_NAME)-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: isolate-jupyter-${SERVICE_NAME}
+  template:
+    metadata:
+      labels:
+        app: isolate-jupyter-$(SERVICE_NAME)
+    spec:
+      containers:
+      - name: isolate-jupyter
+        image: dhohirp/isolate-jupyter
+        ports:
+        - containerPort: 8888

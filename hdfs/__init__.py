@@ -2,35 +2,50 @@ import requests
 import os
 from dotenv import load_dotenv
 from flask import Flask, jsonify
+import subprocess
 
 load_dotenv()
 
-# Replace <dir-path> with the directory path you want to create
 hdfs_url = os.environ.get('HDFS_URL')
 
 # check connection
 def check_connection():
-    try:
-        r = requests.get(hdfs_url)
-        return True
-    except Exception as e:
-        print(str(e))
-        return False
+    print("hdfs connecting...")
+    #try:
+    #    r = requests.get(hdfs_url)
+    #    print("hdfs conn success")
+    #    return True
+    #except Exception as e:
+    #    print(str(e))
+    #    print("hdfs conn failed")
+    #    return False
+    return True
 
 def dir_create(username):
-    r = requests.put(hdfs_url + f"/usersapujagad/{username}?user.name={username}&op=MKDIRS")
-
-    if r.status_code == 200:
-        print("Directory created successfully")
-    else:
-        print("Failed to create directory")
-        print(r.text)
+    print("dir_create")
+    container_name_or_id = "$(docker ps --format '{{.Names}}' | grep 'hdfs-hive_namenode')"
+    bash_command = f"docker exec -it {container_name_or_id} groupadd {username}; \
+    docker exec -it {container_name_or_id} useradd -g {username} {username}; \
+    docker exec -it {container_name_or_id} hdfs dfs -mkdir -p /usersapujagad/{username}; \
+    docker exec -it {container_name_or_id} hdfs dfs -chown {username}:{username} /usersapujagad/{username}; \
+    docker exec -it {container_name_or_id} hdfs dfs -chmod 755 /usersapujagad/{username}"
+    
+    command = f"{bash_command}"
+    try:
+        subprocess.run(command, shell=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error executing command: {e}")
         
 def dir_remove(username):
-    r = requests.delete(hdfs_url + f"/usersapujagad/{username}?user.name={username}&op=DELETE")
-
-    if r.status_code == 200:
-        print("Directory removed successfully")
-    else:
-        print("Failed to remove directory")
-        print(r.text)
+    container_name_or_id = "$(docker ps --format '{{.Names}}' | grep 'hdfs-hive_namenode')"
+    bash_command = f"docker stack rm {username}; \
+    docker exec -it {container_name_or_id} hdfs dfs -rm -r /usersapujagad/{username}; \
+    docker exec -it {container_name_or_id} userdel {username}; \
+    docker exec -it {container_name_or_id} groupdel {username};"
+ 
+    
+    command = f"{bash_command}"
+    try:
+        subprocess.run(command, shell=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error executing command: {e}")

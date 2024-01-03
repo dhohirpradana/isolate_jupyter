@@ -46,19 +46,14 @@ version: '3.8'
 
 services:
   $service_name:
-    image: 103.127.97.93:5000/jupyter-spark
+    image: dhohirp/pyspark-jupyter
     deploy:
       replicas: 1
     ports:
       - "$port:8888"
-    volumes:
-      - jupyter-$service_name:/home/jovyan/work
     environment:
       - JUPYTER_ENABLE_LAB=yes
       - GRANT_SUDO=yes
-
-volumes:
-  jupyter-$service_name:
 EOF
 
 # Deploy the stack

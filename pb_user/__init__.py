@@ -9,6 +9,7 @@ load_dotenv()
 
 pb_user_url = os.environ.get('PB_USER_URL')
 
+print(pb_user_url)
 def user_create(j_token, j_port, username, password, email, first_name, last_name):
     print({
         "email": email,

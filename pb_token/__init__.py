@@ -13,9 +13,11 @@ pb_password = os.environ.get('PB_PASSWORD')
 def check_connection():
     try:
         r = requests.get(pb_login_url)
+        print("pb conn success")
         return True
     except Exception as e:
         print(str(e))
+        print("pb conn failed")
         return False
 
 def token_get():

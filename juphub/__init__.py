@@ -45,7 +45,7 @@ def generate_token(service_name):
     unused_port = subprocess.run([
         '/bin/bash',
         '-c',
-        f'/home/bodhaperjuangan/isolate_jupyter/unused_port.sh'
+        f'/home/ubuntu/isolate_jupyter/unused_port.sh'
     ], capture_output=True, text=True).stdout.strip()
     
     if unused_port == "404":
@@ -56,7 +56,7 @@ def generate_token(service_name):
     jupyter = subprocess.run([
         '/bin/bash',
         '-c',
-        f'/home/bodhaperjuangan/isolate_jupyter/jupyter.sh {service_name} {port}'
+        f'/home/ubuntu/isolate_jupyter/jupyter.sh {service_name} {port}'
     ], capture_output=True, text=True).stdout.strip()
     
     if jupyter == "400":
@@ -84,13 +84,13 @@ def service_remove(service_name):
     subprocess.run([
         '/bin/bash',
         '-c',
-        f'docker stack rm --volumes {service_name}'
+        f'docker stack rm {service_name}'
     ], capture_output=True, text=True).stdout.strip()
     
     subprocess.run([
         '/bin/bash',
         '-c',
-        f'ansible-playbook /home/bodhaperjuangan/isolate_jupyter/ansible/rm-volumes.yml'
+        f'ansible-playbook /home/ubuntu/isolate_jupyter/ansible/rm-volumes.yml'
     ], capture_output=True, text=True).stdout.strip()
     
     dir_remove(service_name)
